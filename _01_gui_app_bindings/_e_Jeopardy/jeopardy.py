@@ -14,9 +14,9 @@ class Jeopardy(tk.Tk):
         button_width, button_height, num_buttons = self.setup_buttons(categories)
 
         # TODO: Create a member variable for the list of categories
-
+        self.categories = {"Video Games", "History", "Science", "Math"}
         # TODO: Create a member variable for the score/money
-
+        self.score = 0
         for i in range(num_buttons):
             row_num = int(i / len(categories))
             col_num = int(i % len(categories))
@@ -27,9 +27,9 @@ class Jeopardy(tk.Tk):
             # Create the category header and buttons where
             # row 0 is the category title
             if row_num == 0:
-                pass
                 # TODO: To get the category name, use the categories member variable and column num
-
+                label = tk.Label(text=self.categories[col_num])
+                label.place(x=col_x, y=row_y, width=button_width, height=button_height)
                 # TODO: Place the Label using the 'col_x', 'row_y', 'button_width',
                 #  and 'button_height' variables
 

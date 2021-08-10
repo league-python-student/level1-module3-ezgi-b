@@ -3,6 +3,8 @@
 """
 import random
 import tkinter as tk
+import time
+from tkinter import messagebox
 
 
 class Whack(tk.Tk):
@@ -12,12 +14,14 @@ class Whack(tk.Tk):
 
         columns_per_row = 5
         button_width, button_height = self.setup_buttons(num_buttons, columns_per_row)
-
+        self.start_time = time.time()
+        self.mole_rate = 0
+        self.mole_num = 0
         # TODO: Create a member variable for the list of buttons
-
+        self.mole_holes = list()
         # TODO: Create a member variable for the random mole button and
         #  initialize it to None
-
+        self.mole = None
         # TODO: Use a loop to create enough buttons to fill the window.
         #  Use the 'columns_per_row', 'button_width', 'button_height' variables
         #  when calling button.place() to put each button in the correct
@@ -27,6 +31,11 @@ class Whack(tk.Tk):
             col_num = int(i % columns_per_row)
             row_y = row_num * button_height
             col_x = col_num * button_width
+            button = tk.Button()
+            button.place(x=col_x, y=row_y, width=button_width, height=button_height)
+            button.bind("<ButtonPress>", self.on_button_press)
+            button.config(bg='light gray', font=("Times New Roman", 20))
+            self.mole_holes.append(button)
 
             # TODO: Call the button's bind() method to call the on_button_press()
             #  method when a mouse button is pressed
@@ -37,23 +46,31 @@ class Whack(tk.Tk):
 
         # TODO: Set the mole button to the output of the random.choice() method
         #  to return a random button from the list of buttons
-
+        self.mole = random.choice(self.mole_holes)
         # TODO: Call the mole button's config(text='mole!') method to set its
         #  text to 'mole!'
+        self.mole.config(text="Mole!", bg='saddle brown')
+
 
     def on_button_press(self, event):
         button_pressed = event.widget
         print('button ' + repr(button_pressed) + ' clicked!')
 
         # TODO: return if button pressed is not the mole button!
-
+        if button_pressed != self.mole:
+            return
         # TODO: Clear text for current mole button using
         #  the buttons' configure() method
-
+        self.mole.configure(text='', bg='light gray')
         # TODO: Get new random mole button that's different from the current one
-
+        self.mole = random.choice(self.mole_holes)
         # TODO: Change the text for the new mole button using
         #  the buttons' configure() method
+        self.mole.config(text="Mole!", bg='saddle brown')
+        self.mole_num += 1
+        mole_rate = float(self.mole_num) / (time.time() - self.start_time)
+        messagebox.showinfo(message=str(mole_rate))
+
 
 
     def setup_buttons(self, num_buttons, columns_per_row):
