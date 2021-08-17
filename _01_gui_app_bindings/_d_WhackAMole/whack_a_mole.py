@@ -17,6 +17,8 @@ class Whack(tk.Tk):
         self.start_time = time.time()
         self.mole_rate = 0
         self.mole_num = 0
+        self.mole_rate_label = tk.Label(text="Mole Rate: ???  Number of Moles Whacked: 0")
+        self.mole_rate_label.place(x=0, y=550, height=50, width=800)
         # TODO: Create a member variable for the list of buttons
         self.mole_holes = list()
         # TODO: Create a member variable for the random mole button and
@@ -54,7 +56,6 @@ class Whack(tk.Tk):
 
     def on_button_press(self, event):
         button_pressed = event.widget
-        print('button ' + repr(button_pressed) + ' clicked!')
 
         # TODO: return if button pressed is not the mole button!
         if button_pressed != self.mole:
@@ -69,7 +70,8 @@ class Whack(tk.Tk):
         self.mole.config(text="Mole!", bg='saddle brown')
         self.mole_num += 1
         mole_rate = float(self.mole_num) / (time.time() - self.start_time)
-        messagebox.showinfo(message=str(mole_rate))
+        self.mole_rate_label.config(text="Mole Rate: " + str(mole_rate) + "  Number of Moles Whacked: " + str(self.mole_num))
+
 
 
 
@@ -84,7 +86,7 @@ class Whack(tk.Tk):
             num_rows += 1
 
         button_width = int(self.winfo_width() / columns_per_row)
-        button_height = int(self.winfo_height() / num_rows)
+        button_height = int(self.winfo_height() / num_rows) - 10
 
         return button_width, button_height
 

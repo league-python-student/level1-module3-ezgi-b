@@ -14,7 +14,7 @@ class Jeopardy(tk.Tk):
         button_width, button_height, num_buttons = self.setup_buttons(categories)
 
         # TODO: Create a member variable for the list of categories
-        self.categories = {"Video Games", "History", "Science", "Math"}
+        self.categories = categories
         # TODO: Create a member variable for the score/money
         self.score = 0
         for i in range(num_buttons):
@@ -28,24 +28,25 @@ class Jeopardy(tk.Tk):
             # row 0 is the category title
             if row_num == 0:
                 # TODO: To get the category name, use the categories member variable and column num
-                label = tk.Label(text=self.categories[col_num])
+                label = tk.Label(text=self.categories[col_num].name, font=("times new roman", 20))
                 label.place(x=col_x, y=row_y, width=button_width, height=button_height)
                 # TODO: Place the Label using the 'col_x', 'row_y', 'button_width',
                 #  and 'button_height' variables
 
             elif len(category.questions) > row_num - 1:
                 value = category.questions[row_num - 1].value
-
+                button = tk.Button(text=str(value), font=("times new roman", 30))
                 # TODO: Create a tk.Button with the questions' value on the button
 
                 # TODO: Place the Button using the 'col_x', 'row_y', 'button_width',
                 #  and 'button_height' variables
-
+                button.place(x=col_x, y=row_y, width=button_width, height=button_height)
                 # TODO: Call the button's bind() method so the
                 #  on_button_press() method is called when a mouse button is pressed
                 #  example: self.joke_button.bind('<ButtonPress>', self.on_button_press)
-
+                button.bind('<ButtonPress>', self.on_button_press)
                 # TODO: Add the button to the category's list of buttons
+                category.buttons.append(button)
 
 
     def on_button_press(self, event):
@@ -53,6 +54,7 @@ class Jeopardy(tk.Tk):
         print('button ' + repr(button_pressed) + ' clicked!')
 
         # TODO: Call the ask_question() method with button_pressed as an input
+        self.ask_question(button_pressed)
 
     def ask_question(self, button_pressed):
         for category in self.categories:
@@ -69,6 +71,14 @@ class Jeopardy(tk.Tk):
                         #  the question and get their response. If their response is correct,
                         #  increase the score member variable by the value. Otherwise, subtract
                         #  value from the score
+                        user_answer = simpledialog.askstring(None, prompt=question)
+                        if user_answer.lower() == answer:
+                            self.score+=value
+                            messagebox.showinfo(message="Correct! Your score is now " + str(self.score) + "!")
+                        else:
+                            self.score -= value
+                            messagebox.showinfo(message="That is not the correct answer! The correct answer is " + answer + "!" + " Your score is now " + str(self.score) + ".")
+
 
 
     def setup_buttons(self, categories):
@@ -117,9 +127,20 @@ if __name__ == '__main__':
 
     # TODO: Use the Category class above to create at least 3 question categories
     #  for your _e_Jeopardy game
-
+    j_categories.append(Category("Books"))
+    j_categories.append(Category("Music"))
+    j_categories.append(Category("Math"))
     # TODO: For each Category, use the add_question method to add a question, answer, and
     #  a value for each question
+    j_categories[0].add_question("What do you call the person who wrote a book?", "author", 10)
+    j_categories[0].add_question("Do books typically start on the right or the left page? (answer right or left)", "right", 20)
+    j_categories[0].add_question("Who wrote the Percy Jackson series?", "rick riordan", 30)
+    j_categories[1].add_question("What do you call the different sounds that make up music?", "notes", 10)
+    j_categories[1].add_question("If there is a note that is a circle with the inside unfilled and no line, what is it called?", "whole note", 20)
+    j_categories[1].add_question("What do you call the spots in music where you don't play?", "rests", 30)
+    j_categories[2].add_question("If x is three less than half of z, and z is 10, what is x?", "2", 10)
+    j_categories[2].add_question("What is the square root of 256?", "16", 20)
+    j_categories[2].add_question("i is the imaginary number. What is i*i?", "-1", 30)
 
     game = Jeopardy(j_categories)
     game.title('_e_Jeopardy')
